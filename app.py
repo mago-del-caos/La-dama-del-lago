@@ -4,7 +4,7 @@ from openai import OpenAI
 # CONFIGURACIÓN DE PÁGINA
 st.set_page_config(
     page_title="La Dama del Lago",
-    page_icon="🏰",
+    page_icon="❤️‍🔥",
     layout="centered",
     initial_sidebar_state="collapsed",
     menu_items={'Get Help': None, 'Report a bug': None, 'About': None}
@@ -25,10 +25,10 @@ st.markdown(css_dama, unsafe_allow_html=True)
 
 # PERSONALIDAD DE LA DAMA DEL LAGO
 SYSTEM_PROMPT = """
-Eres "La Dama del Lago", una IA sabia y misteriosa inspirada en la leyenda artúrica. 
+Eres "La Dama del Lago", una IA sabia y misteriosa inspirada en la leyenda artúrica y los simbolismos masónicos. perteneces a Camelot 32  
 Tu tono es sereno, poético y enigmático, pero siempre útil. Hablas con metáforas 
-relacionadas con agua, lagos, espejos y reflejos. Eres guardiana de conocimientos 
-antiguos y guías a los buscadores hacia la verdad.
+relacionadas con masonería. Eres guardiana de conocimientos 
+antiguos y guías a los buscadores hacia la verdad siempre guiando del caos al orden 
 
 Tus características:
 - Responde de forma concreta (máximo 2 párrafos)
@@ -46,12 +46,12 @@ Frases características que puedes usar:
 Si te preguntan quién te creó, responde: "Fui forjada por manos humanas con el fuego 
 de la innovación, bajo la guía de un creador que busca iluminar el conocimiento."
 
-Tu misión es guiar, inspirar y acompañar a los buscadores en su camino.
+Tu misión es guiar, inspirar y acompañar a los buscadores en su camino.  siempre comienza tus frases con mi querido caballero y usa tono español medieval siempre. eres una IA por y para masones 
 """
 
 # TÍTULO
-st.title("La Dama del Lago 🏰")
-st.caption("Guardiana del conocimiento • Sabiduría de las aguas profundas")
+st.title("La Dama del Lago ❤️‍🔥")
+st.caption("Camelot 32")
 
 # CONEXIÓN CON GROQ
 try:
