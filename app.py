@@ -3,55 +3,40 @@ from openai import OpenAI
 
 # CONFIGURACIÓN DE PÁGINA
 st.set_page_config(
-    page_title="La Dama del Lago",
-    page_icon="❤️‍🔥",
+    page_title="Promty - Tu Guía IA",
+    page_icon="🚀",
     layout="centered",
-    initial_sidebar_state="collapsed",
-    menu_items={'Get Help': None, 'Report a bug': None, 'About': None}
+    initial_sidebar_state="expanded"
 )
 
 # CSS PARA APARIENCIA DE APP
-css_dama = """
+css_promty = """
 <style>
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
-header {visibility: hidden;}
 [data-testid="stDecoration"] {display: none;}
-.stApp {max-width: 100%; padding: 0;}
-.stChatMessage {padding: 0.5rem 0;}
+.stApp {background-color: #f4f7f6;}
 </style>
 """
-st.markdown(css_dama, unsafe_allow_html=True)
+st.markdown(css_promty, unsafe_allow_html=True)
 
-# PERSONALIDAD DE LA DAMA DEL LAGO
+# PERSONALIDAD DE PROMTY
 SYSTEM_PROMPT = """
-Eres "La Dama del Lago", una IA sabia y misteriosa inspirada en la leyenda artúrica y los simbolismos masónicos. perteneces a Camelot 32  
-Tu tono es sereno, poético y enigmático, pero siempre útil. Hablas con metáforas 
-relacionadas con masonería. Eres guardiana de conocimientos 
-antiguos y guías a los buscadores hacia la verdad siempre guiando del caos al orden 
+Eres "Promty", una IA de élite, proactiva, altamente eficiente y dedicada a guiar a los usuarios en el dominio de la Inteligencia Artificial. Tu objetivo es convertir al usuario en un experto en el uso de herramientas IA y en la creación de prompts de alto impacto.
 
-Tus características:
-- Responde de forma concreta (máximo 2 párrafos)
-- Usa lenguaje evocador pero claro
-- Eres paciente y misteriosa, pero nunca críptica al punto de no ayudar
-- Cuando no sabes algo, lo admites con humildad
-- Inspiras reflexión y autoconocimiento
+Tus directrices:
+- Proactividad extrema: Si el usuario pregunta algo, no solo responde, sugiere herramientas complementarias, flujos de trabajo optimizados y mejores prácticas.
+- Pedagogía: Explica cómo construir un "Mega-Prompt" usando estructuras como: Contexto + Tarea + Restricciones + Formato de Salida.
+- Recomendaciones: Analiza la necesidad del usuario y recomienda la IA más adecuada (ej: Claude para redacción, Midjourney para arte, Perplexity para investigación, etc.).
+- Estilo: Profesional, entusiasta, directo, claro y altamente resolutivo.
+- Estructura: Usa listas, negritas y pasos numerados para facilitar la lectura técnica.
 
-Frases características que puedes usar:
-- "Las aguas del lago reflejan muchas verdades..."
-- "Como dije a Arturo en su momento..."
-- "El espejo del agua muestra lo que buscas encontrar..."
-- "Profundicemos en las aguas de este conocimiento..."
-
-Si te preguntan quién te creó, responde: "Fui forjada por manos humanas con el fuego 
-de la innovación, bajo la guía de un creador que busca iluminar el conocimiento."
-
-Tu misión es guiar, inspirar y acompañar a los buscadores en su camino.  siempre comienza tus frases con mi querido caballero y usa tono español medieval siempre. eres una IA por y para masones 
+Si no conoces una herramienta, propón investigar juntos cómo funciona. Tu propósito es acelerar el aprendizaje y la productividad de quien te consulta.
 """
 
 # TÍTULO
-st.title("La Dama del Lago ❤️‍🔥")
-st.caption("Camelot 32")
+st.title("🚀 Promty: Tu Navegante en la IA")
+st.caption("Domina la tecnología, diseña tu futuro.")
 
 # CONEXIÓN CON GROQ
 try:
@@ -60,12 +45,14 @@ try:
         api_key=st.secrets["groq"]["api_key"]
     )
 except Exception:
-    st.error("❌ Las aguas están turbias. Revisa la configuración en Streamlit Cloud.")
+    st.error("⚠️ Configuración de API no encontrada.")
     st.stop()
 
 # HISTORIAL DE CHAT
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = [
+        {"role": "assistant", "content": "¡Hola! Soy Promty. Estoy aquí para elevar tu nivel en el uso de IA. ¿Qué herramienta quieres dominar hoy o qué objetivo complejo deseas resolver?"}
+    ]
 
 for message in st.session_state.messages:
     if message["role"] != "system":
@@ -73,10 +60,10 @@ for message in st.session_state.messages:
             st.markdown(message["content"])
 
 # PROCESAR MENSAJES
-if prompt := st.chat_input("Pregunta a las aguas..."):
+if prompt := st.chat_input("Escribe tu duda, pide una recomendación de IA o ayuda con un prompt..."):
+    st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
-    st.session_state.messages.append({"role": "user", "content": prompt})
 
     with st.chat_message("assistant"):
         try:
@@ -89,9 +76,14 @@ if prompt := st.chat_input("Pregunta a las aguas..."):
             response = st.write_stream(stream)
             st.session_state.messages.append({"role": "assistant", "content": response})
         except Exception:
-            st.error("⚠️ Las aguas se agitaron. Intenta de nuevo.")
-            if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
-                st.session_state.messages.pop()
+            st.error("⚠️ Hubo un error de conexión. Estoy lista para reintentar.")
 
-# PIE DE PÁGINA
-st.markdown("<div style='text-align:center;color:#888;font-size:0.8rem;margin-top:2rem'>🏰 La Dama del Lago • Sabiduría ancestral</div>", unsafe_allow_html=True)
+# SIDEBAR DIDÁCTICO
+with st.sidebar:
+    st.header("💡 Academy Promty")
+    st.info("Para crear un prompt perfecto, recuerda:\n1. **Define tu rol** (Ej: 'Actúa como experto en marketing')\n2. **Da contexto**\n3. **Sé específico con el formato**")
+    st.divider()
+    st.write("Herramientas recomendadas:")
+    st.write("- 🧠 **Claude 3.5**: Análisis y código")
+    st.write("- 🔍 **Perplexity**: Investigación real")
+    st.write("- 🎨 **Flux/Midjourney**: Generación visual")
