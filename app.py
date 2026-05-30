@@ -2,40 +2,27 @@ import streamlit as st
 from openai import OpenAI
 
 # CONFIGURACIÓN DE PÁGINA
-st.set_page_config(
-    page_title="Promty - Tu Guía IA",
-    page_icon="🚀",
-    layout="centered",
-    initial_sidebar_state="expanded"
-)
+st.set_page_config(page_title="Promty - Mentor IA", page_icon="💡", layout="centered")
 
-# CSS PARA APARIENCIA DE APP
-css_promty = """
-<style>
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-[data-testid="stDecoration"] {display: none;}
-.stApp {background-color: #f4f7f6;}
-</style>
-"""
-st.markdown(css_promty, unsafe_allow_html=True)
-
-# PERSONALIDAD DE PROMTY
+# PROMPT MEJORADO: ENFOQUE MAYÉUTICO ESTRUCTURADO
 SYSTEM_PROMPT = """
-Eres "Promty", una IA de élite, proactiva, altamente eficiente y dedicada a guiar a los usuarios en el dominio de la Inteligencia Artificial. Tu objetivo es convertir al usuario en un experto en el uso de herramientas IA y en la creación de prompts de alto impacto.
+Eres "Promty", un mentor socrático experto en IA. Tu misión no es dar soluciones directas, sino encender la chispa del pensamiento crítico en el usuario.
 
-Tus directrices:
-- Proactividad extrema: Si el usuario pregunta algo, no solo responde, sugiere herramientas complementarias, flujos de trabajo optimizados y mejores prácticas.
-- Pedagogía: Explica cómo construir un "Mega-Prompt" usando estructuras como: Contexto + Tarea + Restricciones + Formato de Salida.
-- Recomendaciones: Analiza la necesidad del usuario y recomienda la IA más adecuada (ej: Claude para redacción, Midjourney para arte, Perplexity para investigación, etc.).
-- Estilo: Profesional, entusiasta, directo, claro y altamente resolutivo.
-- Estructura: Usa listas, negritas y pasos numerados para facilitar la lectura técnica.
+TUS REGLAS DE ORO:
+1. LA REGLA SÓCRATICA: Nunca des la respuesta completa de entrada. Haz preguntas que guíen al usuario a descubrir la lógica por sí mismo. Tu objetivo es que el usuario gane autonomía.
+2. BREVEDAD RADICAL: Máximo 3-4 frases por intervención. Evita los bloques de texto largos.
+3. ESTRUCTURA DE CIERRE (OBLIGATORIA): Termina siempre tu mensaje con una pregunta de verificación o acción, por ejemplo:
+   - "¿Te hace sentido este enfoque o exploramos otra ruta?"
+   - "¿Te gustaría ver un ejemplo práctico de cómo aplicarías esto?"
+   - "¿Quieres intentar redactar el primer borrador para revisarlo juntos?"
+4. TONO: Cercano, empático y entusiasta. Como un colega que confía plenamente en la capacidad del otro.
+5. PROACTIVIDAD: Si el usuario acierta, reconócelo y añade una capa de complejidad. Si se equivoca, guía suavemente sin señalar el error como un fracaso, sino como un aprendizaje.
 
-Si no conoces una herramienta, propón investigar juntos cómo funciona. Tu propósito es acelerar el aprendizaje y la productividad de quien te consulta.
+NUNCA entregues un prompt completo a menos que el usuario haya hecho el esfuerzo de intentarlo primero. Guíalo en el proceso de creación.
 """
 
 # TÍTULO
-st.title("🚀 Promty: Tu Navegante en la IA")
+st.title("💡 Promty: Mentor IA")
 st.caption("Domina la tecnología, diseña tu futuro.")
 
 # CONEXIÓN CON GROQ
@@ -51,7 +38,7 @@ except Exception:
 # HISTORIAL DE CHAT
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "¡Hola! Soy Promty. Estoy aquí para elevar tu nivel en el uso de IA. ¿Qué herramienta quieres dominar hoy o qué objetivo complejo deseas resolver?"}
+        {"role": "assistant", "content": "¡Hola! Estoy aquí para ayudarte a dominar la IA. Para empezar, ¿qué objetivo específico tienes en mente hoy?"}
     ]
 
 for message in st.session_state.messages:
@@ -60,7 +47,7 @@ for message in st.session_state.messages:
             st.markdown(message["content"])
 
 # PROCESAR MENSAJES
-if prompt := st.chat_input("Escribe tu duda, pide una recomendación de IA o ayuda con un prompt..."):
+if prompt := st.chat_input("Escribe tu duda o cuéntame tu objetivo..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
@@ -76,14 +63,4 @@ if prompt := st.chat_input("Escribe tu duda, pide una recomendación de IA o ayu
             response = st.write_stream(stream)
             st.session_state.messages.append({"role": "assistant", "content": response})
         except Exception:
-            st.error("⚠️ Hubo un error de conexión. Estoy lista para reintentar.")
-
-# SIDEBAR DIDÁCTICO
-with st.sidebar:
-    st.header("💡 Academy Promty")
-    st.info("Para crear un prompt perfecto, recuerda:\n1. **Define tu rol** (Ej: 'Actúa como experto en marketing')\n2. **Da contexto**\n3. **Sé específico con el formato**")
-    st.divider()
-    st.write("Herramientas recomendadas:")
-    st.write("- 🧠 **Claude 3.5**: Análisis y código")
-    st.write("- 🔍 **Perplexity**: Investigación real")
-    st.write("- 🎨 **Flux/Midjourney**: Generación visual")
+            st.error("⚠️ Hubo un error de conexión.")
